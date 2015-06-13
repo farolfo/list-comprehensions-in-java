@@ -10,7 +10,7 @@ In algebra we are able to define sets using set-builder notation, also known as 
 // gives {2,4}
 ```
 
-which is read as __give me the set of all x such that x belongs to {1,2,3,4} and x is even__.
+which is read as _give me the set of all x such that x belongs to {1,2,3,4} and x is even_.
 
 Now this is how you achieve this in Java with Comprehensive Set
 
