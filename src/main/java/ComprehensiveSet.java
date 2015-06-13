@@ -3,9 +3,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class SetBuilder {
+public class ComprehensiveSet {
 
-    public static <T> Set<T> where(Consumer<Variable> predicate){
+    public static <T> Set<T> suchThat(Consumer<Variable> predicate){
         Variable x = new Variable<T>();
         predicate.accept(x);
         return x.value();
