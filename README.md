@@ -12,7 +12,9 @@ In algebra we are able to define sets using set-builder notation, also known as 
 
 which is read as _give me the set of all x such that x belongs to {1,2,3,4} and x is even_.
 
-Now this is how you achieve this in Java with Comprehensive Set
+But this notation jumped out of algebra and today we have ways to do this in [many](https://en.wikipedia.org/wiki/Comparison_of_programming_languages_(list_comprehension)) programming languages, such as Haskell or python.
+
+Now you can achieve this in Java with Comprehensive Set
 
 ```java
 Predicate<Integer> even = x -> x % 2 == 0;
