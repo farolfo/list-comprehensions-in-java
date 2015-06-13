@@ -30,6 +30,12 @@ Set<Integer> evens = ComprehensiveSet.suchThat((x) -> {
 
 As you may see in the example, Java 8 is needed.
 
+### Further reading
+
+* [Set-builder notation.](https://en.wikipedia.org/wiki/Set-builder_notation)
+* [How are programming languages supporting this today?](https://en.wikipedia.org/wiki/Comparison_of_programming_languages_(list_comprehension))
+* [Haskell's list comprehension](http://learnyouahaskell.com/starting-out#im-a-list-comprehension)
+
 ### License
 
 MIT
