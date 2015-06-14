@@ -1,5 +1,5 @@
 # Comprehensive Set
-Build sets in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) notation with Java, like { x | x E {1,2} ^ x is even }.
+Build sets in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x | x E {1,2} ^ x is even }.
 
 ### Usage and motivation
 
