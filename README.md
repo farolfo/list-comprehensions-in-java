@@ -1,5 +1,5 @@
 # List Comprehension in Java
-Build lists in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x | x E {1,2} ^ x is even }.
+Build lists in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x * 2 | x E {1,2} ^ x is even }.
 
 ### Usage and motivation
 
@@ -31,7 +31,7 @@ And if we want to transform the output expression in some way like
 
 ```java
 { x * 2 | x E {1,2,3,4} ^ x is even }
-// gives {2,4}
+// gives {2,4,6,8}
 ```
 
 Our java code would look like
