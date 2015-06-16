@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.*;
 public class ListComprehensionTest {
 
     /**
-     *
+     * Test for { x | x E {1,2,3,4} ^ x is even }
      */
     @Test
     public void evenTest() {
@@ -32,6 +32,9 @@ public class ListComprehensionTest {
         assertThat(evens, is(actualEvens));
     }
 
+    /**
+     * Test for { x * 2 | x E {1,2,3,4} }
+     */
     @Test
     public void mapTest() {
         List<Integer> someIntegers = Arrays.asList(1, 2, 3, 4);
