@@ -31,7 +31,7 @@ And if we want to transform the output expression in some way like
 
 ```java
 { x * 2 | x E {1,2,3,4} ^ x is even }
-// gives {2,4,6,8}
+// gives {4,8}
 ```
 
 Our java code would look like
@@ -43,7 +43,7 @@ List<Integer> duplicated = new ListComprehension<Integer>()
             x.belongsTo(Arrays.asList(1, 2, 3, 4));
             x.is(even);
         });
-// duplicated = {2,4,6,8}
+// duplicated = {4,8}
 ```
 
 ### Further reading
