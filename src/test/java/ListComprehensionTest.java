@@ -48,17 +48,4 @@ public class ListComprehensionTest {
 
         assertThat(duplicated, is(actualDuplicated));
     }
-
-    @Test
-    @Ignore
-    public void forAllTest() {
-        assert false;
-    }
-
-    @Test
-    @Ignore
-    public void existsTest() {
-        assert false;
-    }
-
 }
