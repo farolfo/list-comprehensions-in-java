@@ -1,0 +1,277 @@
+\documentclass[%
+ reprint,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose,
+%preprint,
+%showpacs,preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-1}
+
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+\usepackage{listings}
+
+%\usepackage{hyperref}% add hypertext capabilities
+%\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+%\linenumbers\relax % Commence numbering lines
+
+\begin{document}
+
+\title{List Comprehensions in Java}% Force line breaks with \\
+
+\author{Franco Arolfo}
+
+\date{\today}% It is always \today, today,
+             %  but any date may be explicitly specified
+
+\begin{abstract}
+In many programming languages such as Haskell or python is popular to write list comprehensions, like we write in algebra $\{x \mid x \in \mathbb{R} \wedge x \equiv 0 \mod 2 \}$ as the list of all even numbers in $\mathbb{R}$. This article proposes an implementation of list comprehensions in Java, and then provides the implementation of the functions \emph{map} and \emph{filter} using the proposed code.
+\end{abstract}
+
+\pacs{Valid PACS appear here}% PACS, the Physics and Astronomy
+                             % Classification Scheme.
+%\keywords{Suggested keywords}%Use showkeys class option if keyword
+                              %display desired
+\maketitle
+
+%\tableofcontents
+\section{INTRODUCTION}
+
+We may remember from algebra that we can define lists as lists comprehensions, which use a special notation called set-builder notation. For example,
+
+	\[
+		\{(x,y) \mid x \in \mathbb{R} \wedge y \in \mathbb{R} \wedge x * y = x + y\}
+	\]
+
+	denotes the set of all pairs \((x,y)\) such that $x$ and $y$ are real numbers and the product of both numbers equals the sum.\\
+
+	Today, this syntactic construct is integrated in many programming languages, such as Haskell
+
+	\begin{lstlisting}[frame=none]
+[x * 2 | x <- [0 .. 99], x * x > 3]
+	\end{lstlisting}
+
+	python
+
+	\begin{lstlisting}[frame=none]
+S = [2*x for x in range(100) if x**2 > 3]
+	\end{lstlisting}
+
+	C\#
+
+	\begin{lstlisting}[frame=none]
+var ns = Enumerable.Range(0, 100)
+        .Where(x => x*x > 3)
+        .Select(x => x*2);
+	\end{lstlisting}
+
+	Scala
+
+	\begin{lstlisting}[frame=none]
+val s = for (x <- Stream.from(0);
+        if x*x > 3) yield 2*x
+	\end{lstlisting}
+
+	Ruby
+
+	\begin{lstlisting}[frame=none]
+(0..100).select { |x| x**2 > 3 }
+        .map { |x| 2*x }
+	\end{lstlisting}
+
+	and more. But the Java language does not provide a syntactic construct for this concept.\\
+
+	The usage of list comprehensions in Haskell motivated this article. Bringing the set-builder notation to Java, this \emph{way of thinking problems}. Instead of using \emph{for} or \emph{while} statements in your programs, you may work with \emph{map} and \emph{filter} functions, but take into account that thinking problems as list comprehensions is also another good way to practice programming.\\
+
+	The structure of this article follows:\\
+		1. Set-builder notation and list comprehensions definitions as we saw in algebra.\\
+		2. Some words about the implementation of Haskell's list comprehensions. The implementation of \emph{map} and \emph{filter} with list comprehensions.\\
+		3. The proposed implementation of list comprehensions in Java. The implementation of \emph{map} and \emph{filter} with our new list comprehensions.\\
+		4. Discussion. Is this useful at industrial level? Possible enhancements and future work.\\
+
+\section{SET BUILDER NOTATION}
+
+
+	In set theory there is a popular way of defining sets: \emph{set-builder notation}. Any list defined in this way is called a list comprehension.
+    For example, let's define the set of all integers that are even and are bigger or equals than 5
+
+    \[
+    \{ x \mid x \in \mathbb{Z} \wedge x  \textrm{ is even} \wedge x \geq 5 \}
+    \]
+
+    Which is read as \emph{give me the set of all $x$ such that $x$ belongs to the set of the integer numbers, $x$ is even and $x$ is greater than 5}.
+
+    Going formal, a set is composed by three sections: a variable, a colon or vertical bar separator, and a logical predicate, which are contained in curly brackets.\cite{wikipedia}.
+
+    We may also quantify variables, either by using the existential quantifier,  like this definition of the set of all natural even numbers
+
+    \[
+    \{ k \mid k \in \mathbb{N} \wedge \exists n \in \mathbb{N}, k = 2n\}
+    \]
+
+    or the universal quantifier, negations, etc.
+
+    Sometimes, we have to decide if we want our set-builder notation to be able to quantify not only under elements that belong to a set, but also under sets. If we do this, we may encounter some situations like the one described as the Russell's Paradox
+
+    \[
+    \{ S \mid S \notin S \}
+    \]
+
+    which is read as \emph{the set of all sets S such that S does not contain themselves}.
+
+    So let's write the functions \emph{map} and \emph{filter} with the set-builder notation we learned. For the first one, we want the set of all the elements that are in a set S but with some transformation applied, let's say the function $f : S \longrightarrow U$. We could write our version of \emph{map} like this(with some syntax sugar on the variable section)
+
+    \[
+    \{ f x \mid x \in S\}
+    \]
+
+    And now we can do the same for the \emph{filter} function
+
+    \[\{ x \mid x \in S \wedge p x \}\]
+
+    where $x$ must belong to the set S and hold the predicate $p:S \longrightarrow bool$.
+
+\section{LIST COMPREHENSIONS IN HASKELL}
+
+	Haskell is one of the programming languages that supports writing list comprehensions. Let's consider the example
+
+    \begin{lstlisting}[frame=none]
+    [toUpper c | c <- s]
+    \end{lstlisting}
+
+	where s :: String is a string such as "Hello". Strings in Haskell are lists of characters; the generator $c <- s$ feeds each character of s in turn to the left-hand expression toUpper c, building a new list. The result of this list comprehension is "HELLO".\cite{haskellwiki}
+
+    And with multiple generators, we have
+
+    \begin{lstlisting}[frame=none]
+    [(i,j) | i <- [1,2], j <- [1..4]]
+    \end{lstlisting}
+
+	yielding the result
+
+    \begin{lstlisting}[frame=none]
+    [(1,1),(1,2),(1,3),(1,4),(2,1),(2,2),
+   (2,3),(2,4)]
+    \end{lstlisting}
+
+    In Haskell, list comprehensions are translated into equivalent definitions in terms of \emph{map}, and \emph{concat}\cite{wadler}. The translation rules are
+
+    \begin{lstlisting}[frame=none]
+[e |True] = [e]
+[e | q] = [e | q, True]
+[e | b, Q] = if b then [e | Q] else []
+[e | p <- xs, Q] = let ok p = [e | Q]
+                       ok _ = []
+                   in concat (map ok xs)
+    \end{lstlisting}
+
+    Now, we can write the functions \emph{map} and \emph{filter} as a list comprehensions as we did on the previous section
+
+    \begin{lstlisting}[frame=none]
+       map f xs = [f x | x <- xs]
+    filter p xs = [x | x <- xs, p x]
+    \end{lstlisting}
+
+\section{LIST COMPREHENSIONS IN JAVA}
+
+	Here is the proposed solution for list comprehensions in Java, where a new class ListComprehension has been added.
+
+    \[
+    \{ x \mid x \in \{1,2,3,4\} \wedge x \mbox{ is even} \}
+    \]
+
+    would be now expressed in Java as
+
+    \begin{lstlisting}[frame=none]
+Predicate<Integer> even = x -> x % 2 == 0;
+
+List<Integer> evens =
+          new ListComprehension<Integer>()
+  .suchThat(x -> {
+     x.belongsTo(Arrays.asList(1, 2, 3, 4));
+     x.is(even);
+});
+    \end{lstlisting}
+
+    Note that we are using lambdas here, so Java 8 is required.
+    One of the main goals when defining this Java API is that we want the user to read this code and read the same concepts as in the set-builder algebraic notation: \emph{give me the set (or list comprehension) of all x such that x belongs to the list of [1,2,3,4] and x is even}.
+
+    And if you want to modify the output of the expression with some function, for example
+
+    \[
+    \{ x * 2 \mid x \in \{1,2,3,4\} \wedge x \mbox{ is even} \}
+    \]
+
+    we can write it in Java as
+
+    \begin{lstlisting}[frame=none]
+List<Integer> duplicated =
+          new ListComprehension<Integer>()
+  .giveMeAll((Integer x) -> x * 2)
+  .suchThat(x -> {
+     x.belongsTo(Arrays.asList(1, 2, 3, 4));
+     x.is(even);
+});
+    \end{lstlisting}
+
+    Now we can introduce our implementation of the functions \emph{map} and \emph{filter} with our new library
+
+    \begin{lstlisting}[frame=none]
+public List<T> map(List<T> list,
+                   Function<T,T> f) {
+        return new ListComprehension<T>()
+          .giveMeAll((T t) -> f.apply(t))
+          .suchThat(s -> {
+             s.belongsTo(list);
+        });
+}
+
+public List<T> filter(List<T> list,
+                      Predicate<T> p) {
+        return new ListComprehension<T>()
+          .suchThat(s -> {
+             s.belongsTo(list);
+             s.holds(p);
+        });
+}
+    \end{lstlisting}
+
+	We have also the method \emph{is} as an alias of \emph{holds}.
+
+    The full code is in the Apendix A and hosted at https://github.com/farolfo/list-comprehensions-in-java. Note how the code does not contain any \emph{for}, \emph{while} or \emph{if}, only \emph{maps} and \emph{filters}.
+
+\section{DISCUSSION}
+
+	We got able to implement the functions \emph{map} and \emph{filter} using only list comprehensions written in set-builder notation, Haskell and Java code, the latest one with an implementation of this article.
+
+	Our new implementation lacks of some functionality though, such as quantifiers \emph{exists} and \emph{for-all} under elements, quantifiers under sets (which we have in set-builder notation), among others. Could it be possible to express quantification under sets in the Java implementation? How the Russells's Paradox case would behave?
+
+    Another thing to take into consideration is the usage of list comprehensions in production code. We have seen how Java adopted some functional programming fundamentals in its newer releases (Java 8), such as lambdas, \emph{map}, \emph{filter}, etc; may be is not too crazy to think that Java will adopt list comprehensions at some point, as Scala, Clojure and other programming languages have done.
+
+\begin{thebibliography}{9}
+\bibitem{wikipedia}
+Wikipedia, \emph{Set-builder notation} \url{https://en.wikipedia.org/wiki/Set-builder_notation}
+
+\bibitem{haskellwiki}
+Haskell Wiki, \emph{List Comprehension} \url{https://wiki.haskell.org/List_comprehension}
+
+\bibitem{wadler}
+Philip Wadler, \emph{Comprehending Monads} University of Glasgow
+
+\end{thebibliography}
+
+\end{document}

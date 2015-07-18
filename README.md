@@ -1,4 +1,4 @@
-# List Comprehension in Java
+# List Comprehensions in Java
 Build lists in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x * 2 | x E {1,2} ^ x is even }.
 
 ### Usage and motivation
