@@ -1,3 +1,4 @@
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -5,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -54,5 +56,43 @@ public class ListComprehensionTest {
                 .suchThat(s -> {
                     s.belongsTo(list);
                 });
+    }
+
+    /**
+     * Test for { (x,y) | x E {1,2} ^ y E {3,4} }
+     */
+    @Test
+    public void cartesianProductTest() {
+        List<Integer> someIntegers = Arrays.asList(1, 2);
+        List<Integer> moreIntegers = Arrays.asList(3, 4);
+        List<Pair<Integer,Integer>> actualCartesianProduct = Arrays.asList(Pair.of(1,3), Pair.of(1,4),
+                Pair.of(2,3), Pair.of(2,4));
+
+        List<Pair<Integer,Integer>> cartesianProduct = new ListComprehension<Integer>().suchThat((x, y) -> {
+            x.belongsTo(someIntegers);
+            y.belongsTo(moreIntegers);
+        });
+
+        assertThat(cartesianProduct, is(actualCartesianProduct));
+    }
+
+    /**
+     * Test for { (x,y) | x E {1,2,3} ^ y E {4,5,6} ^ x * 2 = y }
+     */
+    @Test
+    public void relationBetweenXYTest() {
+        List<Integer> someIntegers = Arrays.asList(1, 2, 3);
+        List<Integer> moreIntegers = Arrays.asList(4, 5, 6);
+        List<Pair<Integer,Integer>> actualDoublePairs = Arrays.asList(Pair.of(2,4), Pair.of(3,6));
+
+        BiPredicate<Integer, Integer> condition = (x, y) -> x * 2 == y;
+
+        List<Pair<Integer,Integer>> doublePairs = new ListComprehension<Integer>().suchThat((x, y) -> {
+            x.belongsTo(someIntegers);
+            y.belongsTo(moreIntegers);
+            x.holds(condition);
+        });
+
+        assertThat(doublePairs, is(actualDoublePairs));
     }
 }
