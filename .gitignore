@@ -2,7 +2,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+.DS_Store
 *.iml
 
 # Package Files #
