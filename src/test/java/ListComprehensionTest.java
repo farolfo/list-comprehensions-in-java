@@ -58,26 +58,6 @@ public class ListComprehensionTest {
                 });
     }
 
-
-    List<Pair<Integer,Integer>> cartesianProduct = new ListComprehension<Integer>()
-            .suchThat((x, y) -> {
-                x.belongsTo(Arrays.asList(1, 2));
-                y.belongsTo(Arrays.asList(3, 4));
-            });
-
-
-
-    BiPredicate<Integer, Integer> condition = (x, y) -> x * 2 == y;
-
-    List<Pair<Integer,Integer>> doublePairs = new ListComprehension<Integer>()
-            .suchThat((x, y) -> {
-                x.belongsTo(Arrays.asList(1, 2, 3));
-                y.belongsTo(Arrays.asList(4, 5, 6));
-                x.holds(condition);
-            });
-
-
-
     /**
      * Test for { (x,y) | x E {1,2} ^ y E {3,4} }
      */
@@ -114,26 +94,6 @@ public class ListComprehensionTest {
         });
 
         assertThat(doublePairs, is(actualDoublePairs));
-
-
-
-        Predicate<Integer> even = x -> x % 2 == 0;
-        List<Integer> evens = new ListComprehension<Integer>()
-                .suchThat(x -> {
-                    x.belongsTo(Arrays.asList(1, 2, 3, 4));
-                    x.is(even);
-                });
-
-
-        List<Integer> duplicated = new ListComprehension<Integer>()
-                .giveMeAll((Integer x) -> x * 2)
-                .suchThat(x -> {
-                    x.belongsTo(Arrays.asList(1, 2, 3, 4));
-                    x.is(even);
-                });
-
-
-
     }
 
 }
