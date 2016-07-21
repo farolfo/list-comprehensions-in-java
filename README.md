@@ -2,7 +2,7 @@
 Build lists in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x * 2 | x E {1,2} ^ x is even }.
 
 !!!
-THIS IS NOW A JAVA LIBRARI YOU CAN IMPORT USING MAVEN :D https://github.com/farolfo/JComprehension
+THIS IS NOW A JAVA LIBRARY YOU CAN IMPORT USING MAVEN :D https://github.com/farolfo/JComprehension
 !!!
 
 ### Usage and motivation
