@@ -1,6 +1,10 @@
 # List Comprehensions in Java
 Build lists in mathematical [set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation) with Java, like { x * 2 | x E {1,2} ^ x is even }.
 
+!!!
+THIS IS NOW A JAVA LIBRARI YOU CAN IMPORT USING MAVEN :D https://github.com/farolfo/JComprehension
+!!!
+
 ### Usage and motivation
 
 In algebra we are able to define sets using set-builder notation, also known as set comprehension or list comprehension. For example, this computes the even numbers in a set of integers
